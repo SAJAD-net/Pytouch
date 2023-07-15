@@ -11,9 +11,12 @@ alpha = "abcdefghijklmnopqrstuvwxyz"
 def text_generator(chars, text_length):
     text = ""
     for i in range(text_length):
+        if i != 0 and i  % 50 == 0:
+            text += "\n"
         text += random.choice(chars)
         if random.randint(0, 1) == 1:
             text += " "
+
     return text.strip()
 
 
@@ -49,23 +52,37 @@ def practice():
     print("~ [0]- Completely Beginner \t [1]- Beginner\n\
 ~ [2]- A little experienced \t [3]- Experienced\n\
 ~ [4]- Proffessional")
+
     severint = int(input("\n~ Select your level to start the practice. : "))
     chars, text_length = severity(severint)
     text = text_generator(chars, text_length)
+    
     print(f"~ Practicing keys {chars} in {text_length} characters.")
-    print("~ Simple text:\n\n","\t"*5,"#"*50, f"\n\n{text}\n\n","\t"*5, "#"*50)
+    
+    textsp = text.split("\n")
+    hlen = len(max(textsp))+14
+    print("~ Simple text:\n\n\t", "#"*hlen)
+    
+    for line in textsp:
+        print(f"\t\t{line}")
+    print("\t", "#"*hlen, "\n")
+    
     if input("\n~ Are you ready[Y/n] :").upper() == "Y":
         print("~ Let's start in 3 seconds ....")
         time.sleep(3)
         stime = time.time()
         intext = input("\n ")
         etime = int(time.time() - stime)
-        if intext.strip() == text:
+        
+        if intext.strip() == "".join(textsp):
             print("~ Excellent, completely correct !")
+        
         else:
             print("~ It's not quite correct!, had some mistakes!")
             print("~ But with practice your mistakes will be reduced.")
+        
         print(f"~ {text_length} characters in {etime} seconds.\n~ your avarage speed : {round(text_length/etime)} character per second.")
+
 
 def main():
     practice()
