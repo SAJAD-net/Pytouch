@@ -43,6 +43,23 @@ def severity(severint):
     return chars, text_length
 
 
+def accuracy_check(textsp, intext):
+    if len(intext) == 0:
+        sys.exit()
+    elif intext.strip() == "".join(textsp):
+        print("~ Excellent, completely correct !")
+    else:
+        mistakes = 0
+        try:
+            for i in enumerate(textsp):
+                if intext[i[0]] != i[1]:
+                    mistakes += 1
+        except Exception as error:
+            print(f'erorr : {error}')
+
+        print(f"Not quite correct, mistakes : {mistakes}")
+
+
 def practice():
     print("\n~ Available levels : ")
     print("~ [0]- Completely Beginner \t [1]- Beginner\n\
@@ -74,14 +91,7 @@ def practice():
         intext = input("\n~ ")
         etime = int(time.time() - stime)
 
-        if len(intext) == 0:
-            sys.exit()
-        elif intext.strip() == "".join(textsp):
-            print("~ Excellent, completely correct !")
-
-        else:
-            print("~ It's not quite correct!, had some mistakes!")
-
+        accuracy_check(' '.join(textsp), intext)
         print(f"~ {text_length} characters in {etime} seconds.\
             \n~ your avarage speed : {round(text_length/etime)} character per second.")
 
