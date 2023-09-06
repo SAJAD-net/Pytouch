@@ -4,17 +4,18 @@
 import sys
 import random
 import time
+from colorama import Fore, init
+init()
 
 
 def text_generator(chars, text_length):
     text = ""
     for i in range(text_length):
-        if i != 0 and i  % 50 == 0:
+        if (i*2) / 2 == 50:
             text += "\n"
         text += random.choice(chars)
         if random.randint(0, 1) == 1:
             text += " "
-
     return text.strip()
 
 
@@ -50,13 +51,25 @@ def accuracy_check(textsp, intext):
         print("~ Excellent, completely correct !")
     else:
         mistakes = 0
+        print(f"\n[GEN] ~ {textsp}")
+        print("[YOU] ~ ", end="")
         try:
-            for i in enumerate(textsp):
-                if intext[i[0]] != i[1]:
+            for i in enumerate(intext):
+                if i[1] != textsp[i[0]]:
                     mistakes += 1
+                    if i[1] == " ":
+                        print(" ", end="")
+                    else:
+                        print(f"{Fore.RED}{i[1]}", end="")
+                else:
+                    if i[1] == " ":
+                        print(" ", end="")
+                    else:
+                        print(f"{Fore.LIGHTGREEN_EX}{i[1]}", end="")
+
+            print(Fore.WHITE, '\n')
         except Exception as error:
             print(f'erorr : {error}')
-
         print(f"Not quite correct, mistakes : {mistakes}")
 
 
@@ -77,11 +90,12 @@ def practice():
     print(f"~ Practicing keys {chars} in {text_length} characters.")
 
     textsp = text.split("\n")
+    textsp[0] = textsp[0].strip()+" "
     hlen = len(max(textsp))+14
     print("~ Simple text:\n\n\t", "#"*hlen)
-
     for line in textsp:
-        print(f"\t\t{line}")
+        print(f"\t\t|{line}|")
+
     print("\t", "#"*hlen, "\n")
 
     if input("\n~ Are you ready[Y/n] :").upper() == "Y":
@@ -91,20 +105,17 @@ def practice():
         intext = input("\n~ ")
         etime = int(time.time() - stime)
 
-        accuracy_check(' '.join(textsp), intext)
+        accuracy_check(''.join(textsp), intext)
         print(f"~ {text_length} characters in {etime} seconds.\
             \n~ your avarage speed : {round(text_length/etime)} character per second.")
 
 
 def main():
-    print("\n", "\t"*3, "** PYTOUCH **\n")
+    print(Fore.WHITE,"\n", "\t"*3, "** PYTOUCH **\n")
     description = """~ A light cli app to practice typing in various levels.\
     \n~ From totally beginner to advanced and experienced typers.\n"""
     print(description)
     print("~ Note: PUT THE TERMINAL IN FULLSCREEN MODE.")
-    #for ch in description:
-    #    print(ch, end="")
-    #    time.sleep(0.1)
     practice()
 
 main()
